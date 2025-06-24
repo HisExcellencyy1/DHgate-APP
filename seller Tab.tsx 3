@@ -1,0 +1,69 @@
+import React, { useState } from 'react';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import ChatScreen from './ChatScreen';
+
+const Stack = createStackNavigator();
+
+function SellerMain() {
+  const [selectedTwin, setSelectedTwin] = useState('left');
+  const [messages, setMessages] = useState([
+    { id: 1, sender: 'Example Seller', preview: 'Hello, about your order...', unread: true }
+  ]);
+
+  return (
+    <View style={styles.container}>
+      {/* Your existing twin buttons */}
+      <View style={styles.twinButtonContainer}>
+        {/* ... your existing twin button code ... */}
+      </View>
+
+      {/* Message list */}
+      {messages.map(msg => (
+        <Pressable 
+          key={msg.id}
+          style={styles.messageItem}
+          onPress={() => navigation.navigate('Chat', { sender: msg.sender })}
+        >
+          <Text style={styles.sender}>{msg.sender}</Text>
+          <Text style={styles.preview}>{msg.preview}</Text>
+          {msg.unread && <View style={styles.unreadBadge} />}
+        </Pressable>
+      ))}
+    </View>
+  );
+}
+
+export default function SellerTab() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="SellerMain" component={SellerMain} />
+      <Stack.Screen name="Chat" component={ChatScreen} />
+    </Stack.Navigator>
+  );
+}
+
+const styles = StyleSheet.create({
+  // Your existing styles plus:
+  messageItem: { 
+    padding: 15, 
+    borderBottomWidth: 1, 
+    borderBottomColor: '#eee' 
+  },
+  sender: { 
+    fontWeight: 'bold', 
+    marginBottom: 5 
+  },
+  preview: { 
+    color: 'gray' 
+  },
+  unreadBadge: { 
+    width: 10, 
+    height: 10, 
+    borderRadius: 5, 
+    backgroundColor: 'blue',
+    position: 'absolute',
+    right: 15,
+    top: 20
+  }
+});
